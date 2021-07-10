@@ -40,7 +40,24 @@ parte c s = foldr f [[]] s
               | a == c = []:(h:t)
               | otherwise = ((a:h):t)
 
+tabToString :: Tab -> [String]
+tabToString t = map linhaToString t
 
+linhaToString :: Linha -> String
+linhaToString [] = []
+linhaToString ((Peao  ,Branco):t) = '♙':linhaToString t 
+linhaToString ((Cavalo,Branco):t) = '♘':linhaToString t 
+linhaToString ((Bispo ,Branco):t) = '♗':linhaToString t 
+linhaToString ((Dama  ,Branco):t) = '♕':linhaToString t 
+linhaToString ((Rei   ,Branco):t) = '♔':linhaToString t 
+linhaToString ((Torre ,Branco):t) = '♖':linhaToString t 
+linhaToString ((Peao  ,Preto) :t) = 'i':linhaToString t 
+linhaToString ((Cavalo,Preto) :t) = '♞':linhaToString t 
+linhaToString ((Bispo ,Preto) :t) = '♝':linhaToString t 
+linhaToString ((Dama  ,Preto) :t) = '♛':linhaToString t 
+linhaToString ((Rei   ,Preto) :t) = '♚':linhaToString t 
+linhaToString ((Torre ,Preto) :t) = '♜':linhaToString t 
+linhaToString ((Vazio, Neutro):t) = ' ':linhaToString t 
 
 printTab :: Tab -> IO() 
-printTab tab = putStrL
+printTab tab = putStrLn $ unlines $ tabToString tab
