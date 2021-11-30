@@ -62,7 +62,7 @@ linhaToString ((Bispo ,Preto) :t) = ' ':'♝':linhaToString t
 linhaToString ((Dama  ,Preto) :t) = ' ':'♛':linhaToString t 
 linhaToString ((Rei   ,Preto) :t) = ' ':'♚':linhaToString t 
 linhaToString ((Torre ,Preto) :t) = ' ':'♜':linhaToString t 
-linhaToString ((Vazio, Neutro):t) = ' ':' ':linhaToString t 
+linhaToString ((Vazio ,Neutro) :t) = ' ':' ':linhaToString t 
 
 --imprime um tab
 printTab :: Tab -> IO() 
@@ -70,7 +70,10 @@ printTab tab = putStrLn $ unlines $ tabToString tab
 
 --imprime um estado
 printEstado :: Estado -> IO() 
-printEstado (t,c,_,_,_,n) = putStrLn $ unlines $ (tabToString t) ++[show c ++" a jogar"]--,"jogada nº: "++show n]
+printEstado (t,c,_,_,_,n) = 
+    do 
+        putStrLn $ unlines $ (tabToString t) ++ [show c ++" a jogar"]--,"jogada nº: "++show n]
+        putStrLn $ show t
 
 -- converte string para Cor
 charToCor :: String -> Cor
@@ -84,3 +87,6 @@ parte c s = foldr f [[]] s
     where f a (h:t)
               | a == c = []:(h:t)
               | otherwise = ((a:h):t)
+
+
+--printEstado $ fenEstado "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 0"
