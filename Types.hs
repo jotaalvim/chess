@@ -1,12 +1,13 @@
 module Types where
 
-data Peca = Vazio | Torre  | Bispo | Cavalo | Peao | Rei | Dama deriving (Eq,Show)
-data Cor  = Preto | Branco | Neutro deriving (Eq,Show)-- neutro para o vazio?
+data Piece = Empty | Rook  | Bishop | Knight  | Pawn | King | Queen deriving (Eq,Show)
+data Color = Black | White | Neutral deriving (Eq,Show)-- neutro para o vazio?
 
-type VPeca = (Peca,Cor) -- peça final
-type Linha = [VPeca]
-type Tab   = [Linha]
+type VPiece = (Piece,Color) -- peça final
+type Line   = [VPiece]
+type Board  = [Line]
+type Coord  = (Int,Int) 
 --                   origem    chegada
-type Jogada = (Peca,(Int,Int),(Int,Int)) --enpassent?
---                       roque  enpa   50  nºjogada
-type Estado = (Tab,Cor,String,String,Int,Int) -- quem é a jogar
+type Play = (Piece,Coord,Coord) --enpassent?
+--                          roque  enpa   50  nºjogada
+type Estado = (Board,Color,String,String,Int,Int) -- quem é a jogar
