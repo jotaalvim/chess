@@ -1,6 +1,8 @@
 module Chess where 
+
 import Types
 import Data.Char
+import Data.List
 
 -- rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 0
 
@@ -16,7 +18,7 @@ fenBoard :: String -> Board
 fenBoard s  = map fenLine linhas
     where linhas = parte '/' s
 
--- fen to vPeça
+-- fen to VPiece
 auxfenBoard :: Char -> VPiece
 auxfenBoard 'P' = (Pawn  ,White) 
 auxfenBoard 'N' = (Knight,White) 
@@ -41,39 +43,38 @@ fenEstado fen = (t,c, s, enpa, r50, n )
           r50 = read r502 ::Int
           n   = read n2   ::Int
 
--- converte o tabuleiro para string
-tabToString :: Board -> [String]
-tabToString t = map linhaToString t
 
--- converte umma lista de vpeças para string
+-- converts a VPiece to a String
 -- show linha
-linhaToString :: Line -> String
-linhaToString [] = []
-linhaToString ((Pawn  ,White):t) = ' ':'♙':linhaToString t 
-linhaToString ((Knight,White):t) = ' ':'♘':linhaToString t 
-linhaToString ((Bishop ,White):t) = ' ':'♗':linhaToString t 
-linhaToString ((Queen  ,White):t) = ' ':'♕':linhaToString t 
-linhaToString ((King   ,White):t) = ' ':'♔':linhaToString t 
-linhaToString ((Rook ,White):t) = ' ':'♖':linhaToString t 
-linhaToString ((Pawn  ,Black) :t) = ' ':'i':linhaToString t 
---linhaToString ((Pawn  ,Black) :t) = ' ':'♟︎':linhaToString t 
-linhaToString ((Knight,Black) :t) = ' ':'♞':linhaToString t 
-linhaToString ((Bishop ,Black) :t) = ' ':'♝':linhaToString t 
-linhaToString ((Queen  ,Black) :t) = ' ':'♛':linhaToString t 
-linhaToString ((King   ,Black) :t) = ' ':'♚':linhaToString t 
-linhaToString ((Rook ,Black) :t) = ' ':'♜':linhaToString t 
-linhaToString ((Empty ,Neutral) :t) = ' ':' ':linhaToString t 
+vpiece2string :: VPiece -> String
+vpiece2string (Pawn  , White)   = "♙"
+vpiece2string (Knight, White)   = "♘"
+vpiece2string (Bishop, White)   = "♗"
+vpiece2string (Queen , White)   = "♕"
+vpiece2string (King  , White)   = "♔"
+vpiece2string (Rook  , White)   = "♖"
+vpiece2string (Pawn  , Black)   = "i"
+--vpiece2string (Pawn  ,Black) = "♟︎"
+vpiece2string (Knight, Black)   = "♞"
+vpiece2string (Bishop, Black)   = "♝"
+vpiece2string (Queen , Black)   = "♛"
+vpiece2string (King  , Black)   = "♚"
+vpiece2string (Rook  , Black)   = "♜"
+vpiece2string (Empty , Neutral) = " "
+
+board2string :: Board -> String
+board2string b = unlines $ map (intercalate " | ") $ map (map vpiece2string) b
 
 --imprime um tab
 printBoard :: Board -> IO() 
-printBoard tab = putStrLn $ unlines $ tabToString tab
+printBoard b = putStrLn $ board2string b
 
 --imprime um estado
 printEstado :: Estado -> IO() 
 printEstado (t,c,_,_,_,n) = 
     do 
-        putStrLn $ unlines $ (tabToString t) ++ [show c ++" a jogar"]--,"jogada nº: "++show n]
-        putStrLn $ show t
+        putStrLn $ (board2string t)-- ++ [show c ++" a jogar"]--,"jogada nº: "++show n]
+        --putStrLn $ show t
 
 -- converte string para Color
 charToColor :: String -> Color
